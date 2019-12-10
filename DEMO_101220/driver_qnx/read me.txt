@@ -1,0 +1,7 @@
+
+aclad  NuDAQ ACL-8112HG/ACL-8112DG A/D用ドライバプログラム
+aclda  NuDAQ ACL-8112HG/ACL-8112DG D/A用ドライバプログラム
+acdio  NuDAQ ACL-8112HG/ACL-8112DG DIO用ドライバプログラム
+
+hpc    カウンタドライバ用ドライバプログラム
+
