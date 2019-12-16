@@ -111,11 +111,11 @@ double DH;                              /* Distance to representative point for 
 
 /* Parameter for Avoidance Control */
 
-double F_R={0.};                         /* Repulsive Force (‡)Ë—Í          */  
-double TH_R;                            /* Repulsive Force@‚Ì•ûŒü           */
+double F_R={0.};                         /* Repulsive Force (ï¿½ï¿½)ï¿½Ë—ï¿½          */  
+double TH_R;                            /* Repulsive Forceï¿½@ï¿½Ì•ï¿½ï¿½ï¿½           */
 double P_q;                              /* Minimum distance between obstacle and walker control point*/
 double Cross_p[2];                       /* The closest point to the obstacle seen from Walker  */  
-double F_r[3];                           /* Repulsive Force (•”•ª)Ë—Í        */
+double F_r[3];                           /* Repulsive Force (ï¿½ï¿½ï¿½ï¿½)ï¿½Ë—ï¿½        */
 extern thread_pool_t * cp (int argc, char **argv);
 
 /*double torq[2];*/
@@ -773,7 +773,7 @@ OBSCtrl(struct params *param, int trig)
 
 
 
-/* exchange data with serqnx@@ @@@@@@@@@@@@@@*/
+/* exchange data with serqnxï¿½@ï¿½@ ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@*/
 void get_sick_data(void)
 {
 	static unsigned long ticks=0;
@@ -796,7 +796,7 @@ void get_sick_data(void)
 }
 
 /* getObstacleAbsoluteCoordinate                                  */
-/* Find the x and y values of the minimum foot distance obtained from URG   @@@   */
+/* Find the x and y values of the minimum foot distance obtained from URG   ï¿½@ï¿½@ï¿½@   */
 void getObstacleAbsoluteCoordinate(void)
 {
 	double minang;
@@ -818,7 +818,7 @@ void getObstacleAbsoluteCoordinate(void)
 
 /* SlopeCtrl                                                       */
 /* command : slope(double dam[0], double dam[1])                   */
-/* @@*See Research Note 5@@@@@@@@@@@@@@@@@@@@ */
+/* ï¿½@ï¿½@*See Research Note 5ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ */
 void
 SlopeCtrl(struct params *param, int trig)
 {
@@ -894,7 +894,7 @@ ADCtrl(void)
 
 /* AvoidCtrl5                                                       */
 /* command : avo5(double dam[0], double dam[1])                     */
-/*  @–See Research Note 5 @@@@@@@@@@@@@@@@@@@@ */
+/*  ï¿½@ï¿½ï¿½See Research Note 5 ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ */
 void
 AvoidCtrl5(struct params *param, int trig)
 {
@@ -952,7 +952,7 @@ AvoidCtrl5(struct params *param, int trig)
 
 /* AvoidCtrl4                                                       */
 /* command : avo4(double dam[0], double dam[1])                     */
-/*  @–See Research Note 5 @@@@@@@@@@@@@@@@@@@@ */
+/*  ï¿½@ï¿½ï¿½See Research Note 5 ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ */
 
 void
 AvoidCtrl4(struct params *param, int trig)
@@ -1002,7 +1002,7 @@ AvoidCtrl4(struct params *param, int trig)
 /* AvoidCtrl3                                                       */
 /* command : avo3(double dam[0], double dam[1])                     */
 /* 	y = 1.0 & y = -1.0 Obstacle avoidance mode with a wall                   */
-/*  @–See Research Note 4 @@@@@@@@@@@@@@@@@@@@ */
+/*  ï¿½@ï¿½ï¿½See Research Note 4 ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ */
 
 void
 AvoidCtrl3(struct params *param, int trig)
@@ -1047,8 +1047,8 @@ AvoidCtrl3(struct params *param, int trig)
 
 /* AvoidCtrl2                                                       */
 /*   command: avo2(double dam[0], double dam[1])                    */
-/* Obstacle avoidance mode with diagonal line as obstacle@@@                    */
-/* –See Research Note 4                                             */
+/* Obstacle avoidance mode with diagonal line as obstacleï¿½@ï¿½@ï¿½@                    */
+/* ï¿½ï¿½See Research Note 4                                             */
 /*                                                                  */
 void
 AvoidCtrl2(struct params *param, int trig)
@@ -1085,7 +1085,7 @@ AvoidCtrl2(struct params *param, int trig)
 /* AvoidCtrl1                                                      */
 /*   command: avo1(double dam[0], double[1]                        */
 /* Obstacle avoidance mode with mass (2.0, 1.5) as an obstacle                   */
-/* * See Research Note 4@@@@@@@@@@@@@@@@@@@@@@*/
+/* * See Research Note 4ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@*/
 /*                                                                 */
 void
 AvoidCtrl1(struct params *param, int trig)
@@ -1159,8 +1159,8 @@ getNearestDistance(void)
 	return;
 }
 
-/*iTarget friction coefficient)-(actual friction coefficient) = target@@@@@@@*/
-/* I was doing this all the time@@@@@@@@@@@@@@@@@*/
+/*ï¿½iTarget friction coefficient)-(actual friction coefficient) = targetï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@*/
+/* I was doing this all the timeï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@ï¿½@*/
 void
 ModelCtrlOnly(struct params *param, int trig)
 {
@@ -1833,7 +1833,7 @@ TraCtrl3(struct params *param, int trig)
 PR = sqrt((Cur_e.pos[Y] - des_Cur_e.Rad )*(Cur_e.pos[Y] - des_Cur_e.Rad ) 
      + Cur_e.pos[X]*Cur_e.pos[X]);   
 
-/*@Minimum distance between route and current location@*/
+/*ï¿½@Minimum distance between route and current locationï¿½@*/
   R = sqrt(des_Cur_e.Rad * des_Cur_e.Rad);
 
   PQ = - PR + R ;
@@ -1875,12 +1875,12 @@ TraCtrl2(struct params *param, int trig)
   PR = sqrt((Cur_e.pos[Y] - des_Cur_e.Rad )*(Cur_e.pos[Y] - des_Cur_e.Rad ) 
      + Cur_e.pos[X]*Cur_e.pos[X]);   
 
- /*@Minimum distance between route and current location@*/
+ /*ï¿½@Minimum distance between route and current locationï¿½@*/
   R = sqrt(des_Cur_e.Rad * des_Cur_e.Rad);
 
   PQ = PR - R ;
 	    
-  /*des_th = atan(Cur_e.pos[X]/(Cur_e.pos[Y]-R)); *//*@Target angle (wiring angle)@*/
+  /*des_th = atan(Cur_e.pos[X]/(Cur_e.pos[Y]-R)); *//*ï¿½@Target angle (wiring angle)ï¿½@*/
   
   des_th = -asin(Cur_e.pos[X]/PR);
 
@@ -2683,7 +2683,7 @@ main(void)
 
 }
 
-
+//*test to push*/
 
 
 
