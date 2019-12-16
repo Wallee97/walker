@@ -104,17 +104,17 @@ double K_eta;
 double PR, PQ;
 double des_th;
 
-double f_b, t_b;                         /* 並進ブレーキ力，回転用ブレーキ力 */
+double f_b, t_b;                         /* Translational braking force, rotational braking force */
 
-double H;                               /* 代表点までの距離 */
-double DH;                              /* デモ用の代表点までの距離*/
+double H;                               /* Distance to representative point */
+double DH;                              /* Distance to representative point for demonstration*/
 
 /* Parameter for Avoidance Control */
 
 double F_R={0.};                         /* Repulsive Force (合)斥力          */  
 double TH_R;                            /* Repulsive Force　の方向           */
-double P_q;                              /* 障害物とwalkerの制御点との最小距離*/
-double Cross_p[2];                       /* Walkerから見た障害物に一番近い点  */  
+double P_q;                              /* Minimum distance between obstacle and walker control point*/
+double Cross_p[2];                       /* The closest point to the obstacle seen from Walker  */  
 double F_r[3];                           /* Repulsive Force (部分)斥力        */
 extern thread_pool_t * cp (int argc, char **argv);
 
@@ -512,7 +512,7 @@ control(struct params *motor)
 
 /* LMSAvoidCtrl                                                    */
 /* command : lms(double dam[0], double dam[1])                     */
-/*   研究ノート５　参照                                            */
+/*   See Research Note 5                                            */
 void
 LMSAvoidCtrl(struct params *param, int trig)
 {
@@ -543,7 +543,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 
 	
 	if(ticks%50==0){
-	  get_sick_data();   //URGのデータを取得する
+	  get_sick_data();   //Get URG data
 	  fh_dis = fabs(mindata_d[YG]*1000 - mindata_d[yHip]*1000);
 	  newdis = mindata_d[yHip];
 	  
@@ -553,7 +553,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  foothip_dis = fh_dis / 1000.;
 	  
 	  
-	  //プロダクションルール開始
+	  //Production rule start
 	  if((Cur_e.velocity < 0.03) && (Cur_e.velocity > -0.03) && (fh_dis > 70.) && (fh_dis < 200.) && (mindata_d[yHip] > mindata_d[YG])){
 	    state = 1;  /*Midle STATE*/ 
 	    f_b = 100.;
@@ -575,8 +575,8 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  
 	  else{
 	    
-	    //正規分布にしたがう転倒防止機能
-	    //2次元の正規分布により閾値を決定し、閾値をこえたらブレーキがかかる
+	    //Fall prevention function according to normal distribution
+	    //The threshold is determined by a two-dimensional normal distribution, and the brake is applied if the threshold is exceeded.
 	    
 	    X_h = mindata_d[XG]*1000;
 	    Y_h = mindata_d[YG]*1000;
@@ -609,7 +609,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 	      Ie = v2_y*mu_x*mu_x + De*Ee*mu_x + De*De*v2_x;
 	      
 	      
-	      //解の方程式
+	      //Solution equation
 	      
 	      xp1 = (-He + sqrt(He*He - 4*Ge*(Ie-Fe))) / (2*Ge);
 	      xp2 = (-He - sqrt(He*He - 4*Ge*(Ie-Fe))) / (2*Ge);
@@ -627,12 +627,12 @@ LMSAvoidCtrl(struct params *param, int trig)
 	      Xe = (be-Ye)/Ae;
 	      
 	      
-	      //Rの計算
+	      //Calculation of R
 	      
 	      re = sqrt((Xe-mu_x)*(Xe-mu_x) + (Ye-mu_y)*(Ye-mu_y));
 	      
 	      
-	      //dhの計算
+	      //dh calculation
 	      
 	      dh = sqrt((X_h-mu_x)*(X_h-mu_x) + (Y_h-mu_y)*(Y_h-mu_y));
 	      //printf("dh=%f\n",dh);
@@ -641,7 +641,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 	      
 	      printf("TUMBLE STATE\n");
 	      
-	      //ブレーキ力の決定
+	      //Determination of braking force
 	      f_b = exp(Dis/50);
 	      t_b = exp(0.5*Dis/50);
 	    }
@@ -664,7 +664,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 		return;
 }
 
-/*デモ用プログラム*/
+/*Demo program*/
 /* command : demo(double dam[0], double dam[1])*/
 void
 DEMOAvoidCtrl(struct params *param, int trig)
@@ -720,7 +720,7 @@ DEMOAvoidCtrl(struct params *param, int trig)
 }
 /* OBSCtrl                                                         */
 /* command : obs(double dam[0], double dam[1])                     */
-/* キャスター特性を考慮した障害物回避 & 重力補償                   */
+/* Obstacle avoidance and gravity compensation considering caster characteristics                  */
 void
 OBSCtrl(struct params *param, int trig)
 {
@@ -754,10 +754,10 @@ OBSCtrl(struct params *param, int trig)
 		}
 
 		
-		/*進行方向ブレーキ力*/
+		/*Traveling direction braking force*/
 		f_b = des_Cur_e.dmp[V] * Cur_e.velocity - F_R * cos(TH_R) ;
  		
-		/*回転用ブレーキ力*/
+		/*Brake force for rotation*/
 		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega * H * H 	+ F_R * sin(TH_R) / H ; 
 
 		if(ticks%500==0){
@@ -773,7 +773,7 @@ OBSCtrl(struct params *param, int trig)
 
 
 
-/* serqnx とデータのやりとりをする　　 　　　　　　　　　　　　　　*/
+/* exchange data with serqnx　　 　　　　　　　　　　　　　　*/
 void get_sick_data(void)
 {
 	static unsigned long ticks=0;
@@ -796,7 +796,7 @@ void get_sick_data(void)
 }
 
 /* getObstacleAbsoluteCoordinate                                  */
-/* URGから得られた足の最小距離の点の値のx、yをもとめる   　　　   */
+/* Find the x and y values of the minimum foot distance obtained from URG   　　　   */
 void getObstacleAbsoluteCoordinate(void)
 {
 	double minang;
@@ -818,7 +818,7 @@ void getObstacleAbsoluteCoordinate(void)
 
 /* SlopeCtrl                                                       */
 /* command : slope(double dam[0], double dam[1])                   */
-/* 　　*研究ノート５　参照　　　　　　　　　　　　　　　　　　　　 */
+/* 　　*See Research Note 5　　　　　　　　　　　　　　　　　　　　 */
 void
 SlopeCtrl(struct params *param, int trig)
 {
@@ -837,7 +837,7 @@ SlopeCtrl(struct params *param, int trig)
 
 	ADCtrl();
 	
-	/*進行方向ブレーキ力*/
+	/*Traveling direction braking force*/
 
 	if(Cur_e.tilt[beta]<=0.&& Cur_e.velocity>=0.){
 		f_b = des_Cur_e.dmp[V] * Cur_e.velocity +mmm * Grav * sin(-Cur_e.tilt[beta]);
@@ -855,7 +855,7 @@ SlopeCtrl(struct params *param, int trig)
 		f_b = -des_Cur_e.dmp[V] * Cur_e.velocity + mmm * Grav * sin(Cur_e.tilt[beta]);
 		if(ticks%500==0) printf("4\n");
 	}
-	/*ブレーキモーメント*/
+	/*Brake moment*/
 	if(Cur_e.velocity>=0.)
 		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega - mmm * Grav * sin(Cur_e.tilt[alpha]) * H_m;
 	else
@@ -894,7 +894,7 @@ ADCtrl(void)
 
 /* AvoidCtrl5                                                       */
 /* command : avo5(double dam[0], double dam[1])                     */
-/*  　＊研究ノート5　参照 　　　　　　　　　　　　　　　　　　　　 */
+/*  　＊See Research Note 5 　　　　　　　　　　　　　　　　　　　　 */
 void
 AvoidCtrl5(struct params *param, int trig)
 {
@@ -938,10 +938,10 @@ AvoidCtrl5(struct params *param, int trig)
 	if(P_q<=rou0) RepulsiveForce(); 
 	else F_R = 0.0;
 	
-	/*進行方向ブレーキ力*/
+	/*Traveling direction braking force*/
     /*f_b = des_Cur_e.dmp[V] * Cur_e.velocity +(-F_R * cos(TH_R)) ;*/
 	f_b = des_Cur_e.dmp[V] * Cur_e.velocity -F_R * cos(TH_R) ;
-	/*回転用ブレーキ力*/
+	/*Brake force for rotation*/
 	/*t_b = - (des_Cur_e.dmp[TH]*Cur_e.omega 	+( - F_R * sin(TH_R) / H )); */
     t_b = - des_Cur_e.dmp[TH]*Cur_e.omega 	+ F_R * sin(TH_R) / H ;
 	
@@ -952,7 +952,7 @@ AvoidCtrl5(struct params *param, int trig)
 
 /* AvoidCtrl4                                                       */
 /* command : avo4(double dam[0], double dam[1])                     */
-/*  　＊研究ノート5　参照 　　　　　　　　　　　　　　　　　　　　 */
+/*  　＊See Research Note 5 　　　　　　　　　　　　　　　　　　　　 */
 
 void
 AvoidCtrl4(struct params *param, int trig)
@@ -989,10 +989,10 @@ AvoidCtrl4(struct params *param, int trig)
 	if(P_q<=rou0) RepulsiveForce(); 
 	else F_R = 0.0;
 	
-	/*進行方向ブレーキ力*/
+	/*Traveling direction braking force*/
  		f_b = des_Cur_e.dmp[V] * Cur_e.velocity - F_R * cos(TH_R) ;
 
-	/*回転用ブレーキ力*/
+	/*Brake force for rotation*/
 		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega 	+ F_R * sin(TH_R) / H ; 
 	
 	TorqCtrl();
@@ -1001,8 +1001,8 @@ AvoidCtrl4(struct params *param, int trig)
 
 /* AvoidCtrl3                                                       */
 /* command : avo3(double dam[0], double dam[1])                     */
-/* 	y = 1.0 & y = -1.0 を壁とした障害物回避モード                   */
-/*  　＊研究ノート４　参照 　　　　　　　　　　　　　　　　　　　　 */
+/* 	y = 1.0 & y = -1.0 Obstacle avoidance mode with a wall                   */
+/*  　＊See Research Note 4 　　　　　　　　　　　　　　　　　　　　 */
 
 void
 AvoidCtrl3(struct params *param, int trig)
@@ -1035,10 +1035,10 @@ AvoidCtrl3(struct params *param, int trig)
 	if(P_q<=rou0) RepulsiveForce(); 
 	else F_R = 0.0;
 	
-	/*進行方向ブレーキ力*/
+	/*Traveling direction braking force*/
  		f_b = des_Cur_e.dmp[V] * Cur_e.velocity - F_R * cos(TH_R) ;
 
-	/*回転用ブレーキ力*/
+	/*Brake force for rotation*/
 		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega 	+ F_R * sin(TH_R) / H ; 
 	
 	TorqCtrl();
@@ -1047,8 +1047,8 @@ AvoidCtrl3(struct params *param, int trig)
 
 /* AvoidCtrl2                                                       */
 /*   command: avo2(double dam[0], double dam[1])                    */
-/* 斜め直線を障害物とした障害物回避モード 　　　                    */
-/* ＊研究ノート４　参照                                             */
+/* Obstacle avoidance mode with diagonal line as obstacle　　　                    */
+/* ＊See Research Note 4                                             */
 /*                                                                  */
 void
 AvoidCtrl2(struct params *param, int trig)
@@ -1072,10 +1072,10 @@ AvoidCtrl2(struct params *param, int trig)
 	if(P_q<=rou0) RepulsiveForce(); 
 	else F_R = 0.0;
 	
-	/*進行方向ブレーキ力*/
+	/*Traveling direction braking force*/
   		f_b = des_Cur_e.dmp[V] * Cur_e.velocity - F_R * cos(TH_R) ;
 		
-	/*回転用ブレーキ力*/
+	/* Brake force for rotation */
 		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega 	+ F_R * sin(TH_R) / H ; 
 	
 	TorqCtrl();
@@ -1084,8 +1084,8 @@ AvoidCtrl2(struct params *param, int trig)
 
 /* AvoidCtrl1                                                      */
 /*   command: avo1(double dam[0], double[1]                        */
-/* 質点(2.0, 1.5)を障害物とした障害物回避モード                    */
-/* ＊研究ノート４　参照　　　　　　　　　　　　　　　　　　　　　　*/
+/* Obstacle avoidance mode with mass (2.0, 1.5) as an obstacle                   */
+/* * See Research Note 4　　　　　　　　　　　　　　　　　　　　　　*/
 /*                                                                 */
 void
 AvoidCtrl1(struct params *param, int trig)
@@ -1107,11 +1107,11 @@ AvoidCtrl1(struct params *param, int trig)
 	if(P_q<=rou0) RepulsiveForce(); 
 	else F_R = 0.0;
 	
-	/*進行方向ブレーキ力*/
+	/*Reference travel direction braking force*/
   
 		f_b = des_Cur_e.dmp[V] * Cur_e.velocity - F_R * cos(TH_R) ;
 
-	/*回転用ブレーキ力*/
+	/*Brake force for rotation */
 		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega 	+ F_R * sin(TH_R) / H ; 
 	
 	TorqCtrl();
@@ -1119,7 +1119,7 @@ AvoidCtrl1(struct params *param, int trig)
 }
 
 /* RepulsiveForce                                                  */
-/* 絶対座標斥力成分，合斥力，合斥力方向　を計算                    */
+/* Calculate absolute coordinate repulsive force component, resultant force, resultant force direction                    */
 void
 RepulsiveForce(void)
 {
@@ -1128,7 +1128,7 @@ RepulsiveForce(void)
 	
 
 
-	/*  cos関数を用いた斥力  */
+	/*  cos Repulsive force using function  */
 	F_r[X] = mindata_d[type]*eta*PI*(Cur_e_c.pos[X]-Cross_p[X])*sin(PI*P_q/rou0)/(rou0*P_q);
 	F_r[Y] = mindata_d[type]*eta*PI*(Cur_e_c.pos[Y]-Cross_p[Y])*sin(PI*P_q/rou0)/(rou0*P_q);
 
@@ -1148,7 +1148,7 @@ RepulsiveForce(void)
 }
 
 /* getNearestDistance                                               */
-/* Walkerから障害物への最近接距離 P_q を求める                      */
+/* Find closest distance P_q from Walker to obstacle                      */
 void
 getNearestDistance(void)
 {
@@ -1159,8 +1159,8 @@ getNearestDistance(void)
 	return;
 }
 
-/*（目標摩擦係数）ー（実際の摩擦係数）＝目標にしている　　　　　　　*/
-/* ずーっとこれ一本でやっていました　　　　　　　　　　　　　　　　　*/
+/*（Target friction coefficient)-(actual friction coefficient) = target　　　　　　　*/
+/* I was doing this all the time　　　　　　　　　　　　　　　　　*/
 void
 ModelCtrlOnly(struct params *param, int trig)
 {
@@ -1175,16 +1175,16 @@ ModelCtrlOnly(struct params *param, int trig)
   getCurrentStatus();
   
   if( Cur_e.velocity > 0 ){
-    /*進行方向ブレーキ力*/
+    /*Traveling direction braking force*/
         f_b = des_Cur_e.dmp[V]*Cur_e.velocity ;
-    /*回転方向ブレーキ力*/
-        /* t_b = - des_Cur_e.dmp[TH]*Cur_e.omega ; */          /*原さんバージョン*/
-		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega*H*H ;            /*  キャスター特性 */
+    /*Rotation direction braking force*/
+        /* t_b = - des_Cur_e.dmp[TH]*Cur_e.omega ; */          /*Hara version*/
+		t_b = - des_Cur_e.dmp[TH]*Cur_e.omega*H*H ;            /*  Caster characteristics*/
   } 
   else{
         f_b = -des_Cur_e.dmp[V]*Cur_e.velocity ;
-        /* t_b = + des_Cur_e.dmp[TH]*Cur_e.omega ; */          /*原さんバージョン*/
-		t_b = + des_Cur_e.dmp[TH]*Cur_e.omega*H*H ;            /* キャスター特性 */
+        /* t_b = + des_Cur_e.dmp[TH]*Cur_e.omega ; */          /*Hara version*/
+		t_b = + des_Cur_e.dmp[TH]*Cur_e.omega*H*H ;            /* Caster characteristics */
   }
   
   TorqCtrl();
@@ -1192,12 +1192,12 @@ ModelCtrlOnly(struct params *param, int trig)
   
 }
 
-/*ややこしいですが，これは目標の摩擦D_dを直接指定している運動特性可変制御プログラム*/
-/*但し、直進方向のみ．回転に関しては差をコマンド入力してください                   */
+/*This is a bit complicated, but this is a variable motion characteristic control program that directly specifies the target friction D_d.*/
+/*However, only in the straight direction. For rotation, enter the difference command                  */
 void
 ModelCtrlOnly2(struct params *param, int trig)
 {
-	static double Dam = 10.; /*実際の進行方向に関する摩擦係数を入力*/
+	static double Dam = 10.; /*Enter the friction coefficient for the actual direction of travel*/
 	double dam;
 	
 	if(trig){
@@ -1212,9 +1212,9 @@ ModelCtrlOnly2(struct params *param, int trig)
 	dam = des_Cur_e.dmp[V] - Dam;
 	
 	if( Cur_e.velocity > 0 ){
-		/*進行方向ブレーキ力*/
+		/*Traveling direction braking force*/
         f_b = dam*Cur_e.velocity ;
-		/*回転方向ブレーキ力*/
+		/*Rotation direction braking force*/
         t_b = - des_Cur_e.dmp[TH]*Cur_e.omega ;
 	}
 	else{
@@ -1251,13 +1251,13 @@ ModelCtrl5(struct params *param, int trig)
   if(Cur_e.pos[X]>= 2.5 && Cur_e.pos[Y]< -2.3 && Cur_e.pos[Y]>-2.7) Mod5_L5(); 
 
   if( Cur_e.velocity > 0 ){
-    /*進行方向ブレーキ力*/
+    /*Traveling direction braking force*/
     if( er[X] > 0.)
       f_b = des_Cur_e.dmp[V]*Cur_e.velocity + K_v * ( 1.- exp( - er[X] * er[X]))*sTH ;
     else
       f_b = des_Cur_e.dmp[V]*Cur_e.velocity - K_v * ( 1.- exp( - er[X]* er[X]))*sTH ;
     
-    /*回転方向ブレーキ力*/
+    /*Rotation direction braking force*/
     if( er[TH] >0.)
       t_b = - des_Cur_e.dmp[TH]*Cur_e.omega + K_th * ( 1.- exp( - er[TH]* er[TH]) );
     else
@@ -1342,12 +1342,12 @@ ModelCtrl4(struct params *param, int trig)
   cTH = cos(Cur_e.pos[TH]);
   sTH = sin(Cur_e.pos[TH]);
 
-  /*進行方向ブレーキ力*/
+  /*Traveling direction braking force*/
   if( Cur_e.pos[Y]>0.)
 	  f_b = des_Cur_e.dmp[V]*Cur_e.velocity + K_v* ( 1.- exp( - Cur_e.pos[Y]*Cur_e.pos[Y]))*sTH ;
   else
 	  f_b = des_Cur_e.dmp[V]*Cur_e.velocity - K_v* ( 1.- exp( - Cur_e.pos[Y]*Cur_e.pos[Y]))*sTH ;
-  /*回転用ブレーキ力*/
+  /*Brake force for rotation*/
    if(Cur_e.pos[TH]>0.)
 	   t_b = - des_Cur_e.dmp[TH]*Cur_e.omega + K_th* ( 1.- exp( - Cur_e.pos[TH]*Cur_e.pos[TH])); 
    else
@@ -1388,13 +1388,13 @@ ModelCtrl3a(struct params *param, int trig)
   if(Cur_e_c.pos[Y]<=-1.5 && Cur_e_c.pos[Y]>=-2.5 && Cur_e_c.pos[X]< 2.5 ) Mod3a_L4();
   if(Cur_e_c.pos[X]>=2.5) Mod3a_L5(); 
 
-  /*進行方向ブレーキ力*/
+  /*Traveling direction braking force*/
     if( PQ > 0.)
       f_b = des_Cur_e.dmp[V] * Cur_e.velocity + K_v * ( 1.- exp( - PQ * PQ ))*sTH ;
     else
       f_b = des_Cur_e.dmp[V] * Cur_e.velocity - K_v * ( 1.- exp( - PQ * PQ ))*sTH ;
  
-  /*回転用ブレーキ力*/
+  /*Brake force for rotation*/
  
     if( PQ > 0.)
       t_b = - des_Cur_e.dmp[TH]*Cur_e.omega 
@@ -1485,7 +1485,7 @@ ModelCtrl3(struct params *param, int trig)
   cTH = cos(Cur_e.pos[TH]);
   sTH = sin(Cur_e.pos[TH]);
 
-  /*進行方向ブレーキ力*/
+  /*Traveling direction braking force*/
 
   if( Cur_e.pos[Y]>0.)
   f_b = des_Cur_e.dmp[V]*Cur_e.velocity 
@@ -1494,7 +1494,7 @@ ModelCtrl3(struct params *param, int trig)
   f_b = des_Cur_e.dmp[V]*Cur_e.velocity 
     - 500.* ( 1.- exp( - (Cur_e.pos[Y]+r_off*sTH)*(Cur_e.pos[Y]+r_off*sTH)))*sTH ;
 
-  /*回転用ブレーキ力*/
+  /*Brake force for rotation*/
  
   if( Cur_e.pos[Y] > 0.)
     t_b = - des_Cur_e.dmp[TH]*Cur_e.omega 
@@ -1530,7 +1530,7 @@ ModelCtrl2(struct params *param, int trig)
   tTH = tan(Cur_e.pos[TH]);
   sTH = sin(Cur_e.pos[TH]);
     
-  /*進行方向ブレーキ力*/
+  /*Traveling direction braking force*/
  
   if( Cur_e.pos[TH] >= (PI/2.-0.001) && Cur_e.pos[TH] <= (PI/2.+0.001))
     f_b = des_Cur_e.mass[M]* k_f_b*sin(Cur_e.pos[TH]+PI/2.)
@@ -1541,7 +1541,7 @@ ModelCtrl2(struct params *param, int trig)
     f_b = des_Cur_e.mass[M]*k_f_b*(-des_Cur_e.velocity+Cur_e.velocity)
       +(des_Cur_e.mass[M]*Cur_e.omega*tTH+des_Cur_e.dmp[V])*Cur_e.velocity ;
   
- /*回転用ブレーキ力*/
+ /*Brake force for rotation*/
   t_b = -(des_Cur_e.mass[J]*k_t_b*(des_Cur_e.omega-Cur_e.omega)+des_Cur_e.dmp[TH]*Cur_e.omega);
 
   TorqCtrl();
@@ -1554,11 +1554,11 @@ TorqCtrl(void)
 { 
   double torq[2], volt[2];
 
- /*ブレーキトルクの決定*/
+ /*Determination of brake torque*/
   torq[r] = MC_r*f_b/2. + MC_r*t_b/MC_T;
   torq[l] = MC_r*f_b/2. + MC_r*t_b/MC_T;
     
-  /* 指令電圧 */
+  /* Command voltage */
  /*   volt[r] = torq[r]/Torqconst_0;  */
 /*    volt[l] = torq[l]/Torqconst_1;  */
 
@@ -1567,9 +1567,9 @@ TorqCtrl(void)
 /*     printf("TYPE = %f, f_b=%f, t_b=%f, torq[r]=%f, torq[r] = %f, Cross_p[X] = %f, Cross_p[Y] = %f\n", */
 /* 	   mindata_d[type], f_b, t_b, torq[r], torq[l], Cross_p[X], Cross_p[Y]); */
   
-  /*left 補正*/
+  /*left correction*/
   
-  /*補正１*/
+  /*Correction 1*/
 
   if(torq[r]>2.1393) volt[r] = (torq[r]+1.3393)/3.4786;
   else volt[r] = torq[r]/2.1393;
@@ -1833,7 +1833,7 @@ TraCtrl3(struct params *param, int trig)
 PR = sqrt((Cur_e.pos[Y] - des_Cur_e.Rad )*(Cur_e.pos[Y] - des_Cur_e.Rad ) 
      + Cur_e.pos[X]*Cur_e.pos[X]);   
 
-/*　経路と現在地との最小距離　*/
+/*　Minimum distance between route and current location　*/
   R = sqrt(des_Cur_e.Rad * des_Cur_e.Rad);
 
   PQ = - PR + R ;
@@ -1875,12 +1875,12 @@ TraCtrl2(struct params *param, int trig)
   PR = sqrt((Cur_e.pos[Y] - des_Cur_e.Rad )*(Cur_e.pos[Y] - des_Cur_e.Rad ) 
      + Cur_e.pos[X]*Cur_e.pos[X]);   
 
- /*　経路と現在地との最小距離　*/
+ /*　Minimum distance between route and current location　*/
   R = sqrt(des_Cur_e.Rad * des_Cur_e.Rad);
 
   PQ = PR - R ;
 	    
-  /*des_th = atan(Cur_e.pos[X]/(Cur_e.pos[Y]-R)); *//*　目標角度(接線角度)　*/
+  /*des_th = atan(Cur_e.pos[X]/(Cur_e.pos[Y]-R)); *//*　Target angle (wiring angle)　*/
   
   des_th = -asin(Cur_e.pos[X]/PR);
 
@@ -2024,25 +2024,25 @@ getCurrentStatus(void)
 
     countbuff = cntRead(cnt);
 
-    /*車輪角度[rad]*/
+    /*Wheel angle [rad]*/
     Cur_j.pos[0] =  count2angle_R(*(countbuff));    
     Cur_j.pos[1] =  count2angle_L(*(countbuff+1));
    
     for(i=0;i<2;i++){                      
-      /*各車輪角速度の計算*/
+      /*Calculation of angular velocity of each wheel*/
       Cur_j.vel[i]=(Cur_j.pos[i]-pre_Cur_j.pos[i])/ TICKS;
-      /*各車輪速度の計算*/
+      /*Calculation of each wheel speed*/
       Cur_w.vel[i]= MC_r * Cur_j.vel[i];
         }
    
-    /*速度の大きさを計算*/
+    /*Calculate speed magnitude*/
     Cur_e.velocity = ( Cur_w.vel[0] + Cur_w.vel[1] ) / 2 ;
     Cur_e.omega = ( Cur_w.vel[0] - Cur_w.vel[1] ) / MC_T ;    
     ticks++;
     getCurrentPosition();
 
-    /* 代表点の長さを計算                         */
-	/* 速度の変化によって、代表点の距離も変化する */
+    /* Calculate representative point length                         */
+	/* The distance of the representative point changes with the change of speed. */
 
 	if(Cur_e.velocity >= 0){
 		H = 1.5 * Cur_e.velocity * Cur_e.velocity + 0.2;
@@ -2108,12 +2108,12 @@ torqCtrl(void)
     I[0]+= des_Cur_j.vel[0]-Cur_j.vel[0];
     I[1]+= des_Cur_j.vel[1]-Cur_j.vel[1];
     
-    /* 目標角加速度 */
+    /* Target angular acceleration */
     
     des_Cur_j.acc[0] = (des_Cur_j.vel[0]-pre_des_Cur_j.vel[0])/TICKS;
     des_Cur_j.acc[1] = (des_Cur_j.vel[1]-pre_des_Cur_j.vel[1])/TICKS;
 
-    /* PI制御 */
+    /* PI control*/
     accel[0] = des_Cur_j.acc[0]+Kp[0]*(des_Cur_j.vel[0]-Cur_j.vel[0])+Ki_control[0]*I[0];
     accel[1] = des_Cur_j.acc[1]+Kp[1]*(des_Cur_j.vel[1]-Cur_j.vel[1])+Ki_control[1]*I[1];
 
@@ -2121,11 +2121,11 @@ torqCtrl(void)
     torq[0] =-( Inertia[0]*accel[0] + Damper[0]*Cur_j.vel[0] );
     torq[1] =-( Inertia[1]*accel[1] + Damper[1]*Cur_j.vel[1] );   
 
-    /* 指令電圧 */
+    /* Command voltage */
     volt[0] = torq[0]/Torqconst_0;
     volt[1] = torq[1]/Torqconst_1;  
 
-    /*left 補正*/
+    /*left correction*/
 
     /*    volt[1] = volt[1]*4.1485/4.0717;*/
     
@@ -2623,7 +2623,7 @@ VisionCtrl(struct params *param, int trig)
     //status =  (status - (status%10))/10;     
     printf("\n%d",status);
 	 
-	  //プロダクションルール開始
+	  //Production rule start
 	  if(status == 1){
 	    f_b = 100.;
 	    t_b = 30.;
