@@ -336,28 +336,27 @@ cp (int argc, char **argv)
 
 
 
-/*/*  後生の人たちへ。 */
+/ * / * To later generations. * /
 
-/* 1. スレッドプールについて */
-/* 現在、スレッドプールは使用しないようにしています。 */
-/* スレッドプールを使用すると、サーバが終了できない */
-/* （スレッドプールを終了できない）からです。 */
-/* /dev/cpcに、同時に２つ以上の処理（コマンド処理）が */
-/* 重なることはないだろうとの判断です。 */
-/* ２つ以上のクライアントからのアクセスが不可能というわけではありません。 */
-/* 実際に、２つ以上のクライアントからアクセスできます。 */
-/* （アトミックなレベルで）同時にwriteされると困る、というだけです。 */
+/ * 1. About thread pool * /
+/ * Currently, thread pool is not used. * /
+/ * Server cannot be terminated using thread pool * /
+/ * (The thread pool cannot be terminated). * /
+/ * Two or more processes (command processes) at the same time in / dev / cpc * /
+/ * Judgment that they will not overlap. * /
+/ * Access from more than one client is not impossible. * /
+/ * In fact, it can be accessed from more than one client. * /
+/ * It's just a problem if you write at the same time (at atomic level). * /
 
-/* 2. コマンド処理について */
-/* コマンドの解読には、見ての通り、strcmpなんていう恥ずかしい事をしています。 */
-/* 処理時間がかさむ、全コマンドを書くのが面倒、ということ以上に、             */
-/* 間違った入力コマンドに対して、それが間違いである、というメッセージを返していません。 */
-/* 一番スマートな方法は、各コマンドに対して、                               */
-/* 受け取ったコマンドキャラクタを使ってpthread_create()を実行することです。 */
-/* とはいえ、間違ったコマンドに対してpthread_create()を使って               */
-/* 何が起こるのか分からなかったり、                                         */
-/* そもそも別スレッドを立ち上げて良いものなのか、ということで見送りました。 */
-/* コマンドの先頭のキャラクタについてswitchすることで                       */
-/* 見た目にも、処理時間も改善されるかも知れません。                         */
-/* 何か良い解決策を編み出した人はご連絡下さい。                             */
-
+/ * 2. About command processing * /
+/ * As you can see, there is an embarrassing thing like strcmp in decoding the command. * /
+/ * Beyond that it takes a lot of processing time and it is troublesome to write all commands * /
+/ * Does not return a message that it is wrong for a wrong input command. * /
+/ * The smartest way is for each command * /
+/ * To execute pthread_create () using the received command character. * /
+/ * However, using pthread_create () for the wrong command * /
+/ * Don't know what will happen * /
+/ * In the first place, I decided not to launch another thread. * /
+/ * By switching the first character of the command * /
+/ * The processing time may be improved as well. * /
+/ * If you have come up with any good solution, please contact me. * /
