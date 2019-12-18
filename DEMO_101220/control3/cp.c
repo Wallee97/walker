@@ -335,7 +335,7 @@ cp (int argc, char **argv)
 }
 
 
-
+/*
 / * / * To later generations. * /
 
 / * 1. About thread pool * /
@@ -359,4 +359,4 @@ cp (int argc, char **argv)
 / * In the first place, I decided not to launch another thread. * /
 / * By switching the first character of the command * /
 / * The processing time may be improved as well. * /
-/ * If you have come up with any good solution, please contact me. * /
+/ * If you have come up with any good solution, please contact me. * /*/
