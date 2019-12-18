@@ -164,6 +164,7 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
     }
     
     //this one seems to define where in the memory to find the actually looked for data. (The offset is how many bits into the memory the data starts)
+    // (check for and handle an XTYPE override)
     xtype = msg->i.xtype & _IO_XTYPE_MASK;
     if ( xtype == _IO_XTYPE_MASK ){
         xoffset = (struct _xtype_offset *)(&msg->i+1);
@@ -174,7 +175,7 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
         doffset = sizeof(msg->i);
     } else return (ENOSYS);
     
-    //If buffer size is wrong, return error?
+    //allocate a buffer big enough for the data. If buffer size is wrong, return error? 
     nbytes = msg->i.nbytes;
     if((buffer = malloc(nbytes)) == NULL) return (ENOSYS);
     
@@ -188,9 +189,9 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
     
     free (buffer);
     
-    _IO_SET_WRITE_NBYTES (ctp, nbytes); //(qnx)checks if the client who sent a message actually has the right to write in the memory?
+    _IO_SET_WRITE_NBYTES (ctp, nbytes); //set up the number of bytes for the client's "write" function to return
     
-    if(nbytes){ //maybe checks if times are ok. maybe not.
+    if(nbytes){ //if any data written, update POSIX structures and OCB offset
         ocb->attr->flags |= IOFUNC_ATTR_MTIME
                          |  IOFUNC_ATTR_DIRTY_TIME;
         if(xtype == _IO_XTYPE_NONE){

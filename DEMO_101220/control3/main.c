@@ -112,11 +112,11 @@ double DH;                              /* Distance to representative point for 
 
 /* Parameter for Avoidance Control */
 
-double F_R={0.};                         /* Repulsive Force (?¿½?¿½)?¿½Ë—ï¿½          */  
-double TH_R;                            /* Repulsive Force?¿½@?¿½Ì•ï¿½?¿½?¿½           */
+double F_R={0.};                         /* Repulsive Force (?ï¿½ï¿½?ï¿½ï¿½)?ï¿½ï¿½Ë—ï¿½          */  
+double TH_R;                            /* Repulsive Force?ï¿½ï¿½@?ï¿½ï¿½Ì•ï¿½?ï¿½ï¿½?ï¿½ï¿½           */
 double P_q;                              /* Minimum distance between obstacle and walker control point*/
 double Cross_p[2];                       /* The closest point to the obstacle seen from Walker  */  
-double F_r[3];                           /* Repulsive Force (?¿½?¿½?¿½?¿½)?¿½Ë—ï¿½        */
+double F_r[3];                           /* Repulsive Force (?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½)?ï¿½ï¿½Ë—ï¿½        */
 extern thread_pool_t * cp (int argc, char **argv);
 
 /*double torq[2];*/
@@ -774,7 +774,7 @@ OBSCtrl(struct params *param, int trig)
 
 
 
-/* exchange data with serqnx?¿½@?¿½@ ?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@*/
+/* exchange data with serqnx?ï¿½ï¿½@?ï¿½ï¿½@ ?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@*/
 void get_sick_data(void)
 {
 	static unsigned long ticks=0;
@@ -797,7 +797,7 @@ void get_sick_data(void)
 }
 
 /* getObstacleAbsoluteCoordinate                                  */
-/* Find the x and y values of the minimum foot distance obtained from URG   ?¿½@?¿½@?¿½@   */
+/* Find the x and y values of the minimum foot distance obtained from URG   ?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@   */
 void getObstacleAbsoluteCoordinate(void)
 {
 	double minang;
@@ -819,7 +819,7 @@ void getObstacleAbsoluteCoordinate(void)
 
 /* SlopeCtrl                                                       */
 /* command : slope(double dam[0], double dam[1])                   */
-/* ?¿½@?¿½@*See Research Note 5?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@ */
+/* ?ï¿½ï¿½@?ï¿½ï¿½@*See Research Note 5?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@ */
 void
 SlopeCtrl(struct params *param, int trig)
 {
@@ -895,7 +895,7 @@ ADCtrl(void)
 
 /* AvoidCtrl5                                                       */
 /* command : avo5(double dam[0], double dam[1])                     */
-/*  ?¿½@?¿½?¿½See Research Note 5 ?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@ */
+/*  ?ï¿½ï¿½@?ï¿½ï¿½?ï¿½ï¿½See Research Note 5 ?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@ */
 void
 AvoidCtrl5(struct params *param, int trig)
 {
@@ -953,7 +953,7 @@ AvoidCtrl5(struct params *param, int trig)
 
 /* AvoidCtrl4                                                       */
 /* command : avo4(double dam[0], double dam[1])                     */
-/*  ?¿½@?¿½?¿½See Research Note 5 ?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@ */
+/*  ?ï¿½ï¿½@?ï¿½ï¿½?ï¿½ï¿½See Research Note 5 ?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@ */
 
 void
 AvoidCtrl4(struct params *param, int trig)
@@ -1003,7 +1003,7 @@ AvoidCtrl4(struct params *param, int trig)
 /* AvoidCtrl3                                                       */
 /* command : avo3(double dam[0], double dam[1])                     */
 /* 	y = 1.0 & y = -1.0 Obstacle avoidance mode with a wall                   */
-/*  ?¿½@?¿½?¿½See Research Note 4 ?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@ */
+/*  ?ï¿½ï¿½@?ï¿½ï¿½?ï¿½ï¿½See Research Note 4 ?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@ */
 
 void
 AvoidCtrl3(struct params *param, int trig)
@@ -1048,8 +1048,8 @@ AvoidCtrl3(struct params *param, int trig)
 
 /* AvoidCtrl2                                                       */
 /*   command: avo2(double dam[0], double dam[1])                    */
-/* Obstacle avoidance mode with diagonal line as obstacle?¿½@?¿½@?¿½@                    */
-/* ?¿½?¿½See Research Note 4                                             */
+/* Obstacle avoidance mode with diagonal line as obstacle?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@                    */
+/* ?ï¿½ï¿½?ï¿½ï¿½See Research Note 4                                             */
 /*                                                                  */
 void
 AvoidCtrl2(struct params *param, int trig)
@@ -1086,7 +1086,7 @@ AvoidCtrl2(struct params *param, int trig)
 /* AvoidCtrl1                                                      */
 /*   command: avo1(double dam[0], double[1]                        */
 /* Obstacle avoidance mode with mass (2.0, 1.5) as an obstacle                   */
-/* * See Research Note 4?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@*/
+/* * See Research Note 4?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@*/
 /*                                                                 */
 void
 AvoidCtrl1(struct params *param, int trig)
@@ -1160,8 +1160,8 @@ getNearestDistance(void)
 	return;
 }
 
-/*?¿½iTarget friction coefficient)-(actual friction coefficient) = target?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@*/
-/* I was doing this all the time?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@?¿½@*/
+/*?ï¿½ï¿½iTarget friction coefficient)-(actual friction coefficient) = target?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@*/
+/* I was doing this all the time?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@?ï¿½ï¿½@*/
 void
 ModelCtrlOnly(struct params *param, int trig)
 {
@@ -1834,7 +1834,7 @@ TraCtrl3(struct params *param, int trig)
 PR = sqrt((Cur_e.pos[Y] - des_Cur_e.Rad )*(Cur_e.pos[Y] - des_Cur_e.Rad ) 
      + Cur_e.pos[X]*Cur_e.pos[X]);   
 
-/*?¿½@Minimum distance between route and current location?¿½@*/
+/*?ï¿½ï¿½@Minimum distance between route and current location?ï¿½ï¿½@*/
   R = sqrt(des_Cur_e.Rad * des_Cur_e.Rad);
 
   PQ = - PR + R ;
@@ -1876,12 +1876,12 @@ TraCtrl2(struct params *param, int trig)
   PR = sqrt((Cur_e.pos[Y] - des_Cur_e.Rad )*(Cur_e.pos[Y] - des_Cur_e.Rad ) 
      + Cur_e.pos[X]*Cur_e.pos[X]);   
 
- /*?¿½@Minimum distance between route and current location?¿½@*/
+ /*?ï¿½ï¿½@Minimum distance between route and current location?ï¿½ï¿½@*/
   R = sqrt(des_Cur_e.Rad * des_Cur_e.Rad);
 
   PQ = PR - R ;
 	    
-  /*des_th = atan(Cur_e.pos[X]/(Cur_e.pos[Y]-R)); *//*?¿½@Target angle (wiring angle)?¿½@*/
+  /*des_th = atan(Cur_e.pos[X]/(Cur_e.pos[Y]-R)); *//*?ï¿½ï¿½@Target angle (wiring angle)?ï¿½ï¿½@*/
   
   des_th = -asin(Cur_e.pos[X]/PR);
 
@@ -2232,7 +2232,7 @@ output(double volt[], double torq[])
     buff[16] = mindata_d[yHip];
     
   
-    daOut(da, buff);
+    daOut(da, buff); //Will have to modify this to work with out MCP4725? This function exists in adlda driver folder
     ctrlEndFlag = 1;
 	
     logstrig = 1;
