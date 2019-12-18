@@ -360,6 +360,8 @@ logSave(double buff[])
 }
 
 /*  logWrite() */
+
+//this one takes the 17 data values that are stored in buff and saves them in a file
 void
 logWrite(void)
 {
@@ -426,6 +428,7 @@ control(struct params *motor)
 
     mode = param.mode;
  
+ //switch case
     switch(mode){
     case current:
 		CurCtrl(&param);
@@ -553,7 +556,8 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  
 	  foothip_dis = fh_dis / 1000.;
 	  
-	  
+	  //these conditions seem to be checking for the state of the user, wether the user sits, stands or midolu(?).
+    //the two laser sensors on the walker which are not the lidar might be giving the distance data that is used here.
 	  //Production rule start
 	  if((Cur_e.velocity < 0.03) && (Cur_e.velocity > -0.03) && (fh_dis > 70.) && (fh_dis < 200.) && (mindata_d[yHip] > mindata_d[YG])){
 	    state = 1;  /*Midle STATE*/ 
