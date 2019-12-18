@@ -336,6 +336,7 @@ logsTask()
 */
 /* logSave( void )                                                           */
 
+//maybe there are 18 sensordata values saved in buff. which are probably saved using this function to somewhere else
 int
 logSave(double buff[])
 {
