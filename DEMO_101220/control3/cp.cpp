@@ -336,28 +336,28 @@ cp (int argc, char **argv)
 
 
 
-/*/*  �㐶�̐l�����ցB */
+/*
+/ * / * To later generations. * /
 
-/* 1. �X���b�h�v�[���ɂ��� */
-/* ���݁A�X���b�h�v�[���͎g�p���Ȃ��悤�ɂ��Ă��܂��B */
-/* �X���b�h�v�[�����g�p����ƁA�T�[�o���I���ł��Ȃ� */
-/* �i�X���b�h�v�[�����I���ł��Ȃ��j����ł��B */
-/* /dev/cpc�ɁA�����ɂQ�ȏ�̏����i�R�}���h�����j�� */
-/* �d�Ȃ邱�Ƃ͂Ȃ����낤�Ƃ̔��f�ł��B */
-/* �Q�ȏ�̃N���C�A���g����̃A�N�Z�X���s�\�Ƃ����킯�ł͂���܂���B */
-/* ���ۂɁA�Q�ȏ�̃N���C�A���g����A�N�Z�X�ł��܂��B */
-/* �i�A�g�~�b�N�ȃ��x���Łj������write�����ƍ���A�Ƃ��������ł��B */
+/ * 1. About thread pool * /
+/ * Currently, thread pool is not used. * /
+/ * Server cannot be terminated using thread pool * /
+/ * (The thread pool cannot be terminated). * /
+/ * Two or more processes (command processes) at the same time in / dev / cpc * /
+/ * Judgment that they will not overlap. * /
+/ * Access from more than one client is not impossible. * /
+/ * In fact, it can be accessed from more than one client. * /
+/ * It's just a problem if you write at the same time (at atomic level). * /
 
-/* 2. �R�}���h�����ɂ��� */
-/* �R�}���h�̉�ǂɂ́A���Ă̒ʂ�Astrcmp�Ȃ�Ă����p���������������Ă��܂��B */
-/* �������Ԃ������ށA�S�R�}���h�������̂��ʓ|�A�Ƃ������ƈȏ�ɁA             */
-/* �Ԉ�������̓R�}���h�ɑ΂��āA���ꂪ�ԈႢ�ł���A�Ƃ������b�Z�[�W��Ԃ��Ă��܂���B */
-/* ��ԃX�}�[�g�ȕ��@�́A�e�R�}���h�ɑ΂��āA                               */
-/* �󂯎�����R�}���h�L�����N�^���g����pthread_create()�����s���邱�Ƃł��B */
-/* �Ƃ͂����A�Ԉ�����R�}���h�ɑ΂���pthread_create()���g����               */
-/* �����N����̂�������Ȃ�������A                                         */
-/* ���������ʃX���b�h�𗧂��グ�ėǂ����̂Ȃ̂��A�Ƃ������ƂŌ�����܂����B */
-/* �R�}���h�̐擪�̃L�����N�^�ɂ���switch���邱�Ƃ�                       */
-/* �����ڂɂ��A�������Ԃ����P����邩���m��܂���B                         */
-/* �����ǂ��������҂ݏo�����l�͂��A���������B                             */
-
+/ * 2. About command processing * /
+/ * As you can see, there is an embarrassing thing like strcmp in decoding the command. * /
+/ * Beyond that it takes a lot of processing time and it is troublesome to write all commands * /
+/ * Does not return a message that it is wrong for a wrong input command. * /
+/ * The smartest way is for each command * /
+/ * To execute pthread_create () using the received command character. * /
+/ * However, using pthread_create () for the wrong command * /
+/ * Don't know what will happen * /
+/ * In the first place, I decided not to launch another thread. * /
+/ * By switching the first character of the command * /
+/ * The processing time may be improved as well. * /
+/ * If you have come up with any good solution, please contact me. * /*/
