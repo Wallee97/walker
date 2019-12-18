@@ -158,7 +158,7 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
     struct _xtype_offset *xoffset;
     
     
-    sts = iofunc_write_verify (ctp, msg, ocb, NULL);
+    sts = iofunc_write_verify (ctp, msg, ocb, NULL);//Checks if we have write access to the resource (ocb?)?
     if ( sts != EOK ){
         return (sts);
     }
@@ -198,7 +198,7 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
         }
     }
     
-    return (EOK);
+    return (EOK); //EOK means Everything OK
 }
 
 
