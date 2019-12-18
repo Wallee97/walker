@@ -163,7 +163,7 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
         return (sts);
     }
     
-    
+    //this one seems to define where in the memory to find the actually looked for data. (The offset is how many bits into the memory the data starts)
     xtype = msg->i.xtype & _IO_XTYPE_MASK;
     if ( xtype == _IO_XTYPE_MASK ){
         xoffset = (struct _xtype_offset *)(&msg->i+1);
@@ -205,7 +205,7 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
 
 int
 io_open (resmgr_context_t *ctp, io_open_t *msg,
-         RESMGR_HANDLE_T *handle, void *extra)
+         RESMGR_HANDLE_T *handle, void *extra)// checks if it's possible to open the file ctp(?)
 {
 //    static int open_flag;
     
@@ -228,7 +228,7 @@ io_close (resmgr_context_t *ctp, void *reserved,
          RESMGR_OCB_T *ocb)
 {
     printf ("CP > closed.\n");
-    return (iofunc_close_ocb_default (ctp, reserved, ocb));
+    return (iofunc_close_ocb_default (ctp, reserved, ocb)); // Return the memory allocated for an OCB
 }
 
 
