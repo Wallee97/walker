@@ -139,7 +139,7 @@ unsigned short sickdata[361]={0};
 unsigned short rmsg[1]={1};
 
 double mindata[2] = {0.};
-double mindata_d[7]={0.};
+double mindata_d[7]={0.};   //Question: Where does this one come from, what data is it?
 
 int sockfd, new_fd;
 struct sockaddr_in my_addr;
@@ -777,7 +777,7 @@ OBSCtrl(struct params *param, int trig)
 }
 
 
-
+//Important: This seems to be the place where the function gets the sick data from the server!
 /* exchange data with serqnx�@�@ �@�@�@�@�@�@�@�@�@�@�@�@�@�@*/
 void get_sick_data(void)
 {
