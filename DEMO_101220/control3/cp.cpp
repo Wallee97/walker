@@ -165,7 +165,7 @@ io_write (resmgr_context_t *ctp, io_write_t *msg, iofunc_ocb_t *ocb)
     
     //this one seems to define where in the memory to find the actually looked for data. (The offset is how many bits into the memory the data starts)
     // (check for and handle an XTYPE override)
-    xtype = msg->i.xtype & _IO_XTYPE_MASK;
+    xtype = msg->i.xtype & _IO_XTYPE_MASK;/*used to isolate the type from the flags*/
     if ( xtype == _IO_XTYPE_MASK ){
         xoffset = (struct _xtype_offset *)(&msg->i+1);
         doffset = sizeof(msg->i) + sizeof(*xoffset);
