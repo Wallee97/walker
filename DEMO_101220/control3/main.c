@@ -557,7 +557,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  //Production rule start
 	  if((Cur_e.velocity < 0.03) && (Cur_e.velocity > -0.03) && (fh_dis > 70.) && (fh_dis < 200.) && (mindata_d[yHip] > mindata_d[YG])){
 	    state = 1;  /*Midle STATE*/ 
-	    f_b = 100.;
+	    f_b = 100.; //these seem to be braking forces (f for force and t for torque?)
 	    t_b = 30.;
 	    printf("MIDOLU STATE\n");
 	  }
