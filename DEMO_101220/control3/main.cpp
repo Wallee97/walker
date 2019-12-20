@@ -784,7 +784,7 @@ OBSCtrl(struct params *param, int trig)
 void get_sick_data(void)
 {
 	static unsigned long ticks=0;
-	double CurData[4] = {0.};
+	double CurData[4] = {0.}; //CurData seems to hold data on the force/torque on wheels, position and velocity of Walker
 	
 	CurData[X] = f_b;
 	CurData[Y] = t_b;
@@ -792,7 +792,7 @@ void get_sick_data(void)
 	CurData[V] = Cur_e.velocity;
 	
 
-	recv(new_fd, mindata_d, sizeof(mindata_d),0);
+	recv(new_fd, mindata_d, sizeof(mindata_d),0); //Important: This seems to be where the SICK data is stored into mindata_d
 	send(new_fd, CurData, sizeof(CurData),0);
 
 /* 	if(ticks%100==0) */
