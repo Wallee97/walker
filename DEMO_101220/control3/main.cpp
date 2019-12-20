@@ -140,6 +140,7 @@ unsigned short rmsg[1]={1};
 
 double mindata[2] = {0.};
 double mindata_d[7]={0.};   //Question: Where does this one come from, what data is it?
+                            //I believe it's from Line 795, in recv function, inside get_sick_data function
 
 int sockfd, new_fd;
 struct sockaddr_in my_addr;
@@ -558,7 +559,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  
 	  foothip_dis = fh_dis / 1000.;
 	  
-	  //these conditions seem to be checking for the state of the user, wether the user sits, stands or midolu(?).
+	  //these conditions seem to be checking for the state of the user, wether the user sits, stands, walks, midolu(?) or is tumbling.
     //the two laser sensors on the walker which are not the lidar might be giving the distance data that is used here.
 	  //Production rule start
 	  if((Cur_e.velocity < 0.03) && (Cur_e.velocity > -0.03) && (fh_dis > 70.) && (fh_dis < 200.) && (mindata_d[yHip] > mindata_d[YG])){
@@ -663,9 +664,9 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  }
 	}
 	
-	getObstacleAbsoluteCoordinate();
+	getObstacleAbsoluteCoordinate(); //Uses mindata to find obstacles in the vicinity (in absolute cartesian coords)
 	
-		TorqCtrl();
+		TorqCtrl(); //and then applies appropriate braking force depending on obstacle distance I guess?
 		trig = 0;
 		ticks++;
 		return;
