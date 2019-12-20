@@ -207,7 +207,9 @@ void create_sick(void)
 void 
 init(void)
 {
-    ThreadCtl(_NTO_TCTL_IO,0);
+    ThreadCtl(_NTO_TCTL_IO,0); //Important: Makes us control a thread on QNX system
+                              //Lets the thread execute I/O opcodes
+                              //I think we have to understand how this translates to RasPI
 
     create_sick();
 	
@@ -543,7 +545,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 		printf("D = %f, D_th = %f\n", des_Cur_e.dmp[V], des_Cur_e.dmp[TH]);
 	}
 	
-	getCurrentStatus();
+	getCurrentStatus(); //Seems to update the values for position, velocity and angular velocities
 
 	
 	if(ticks%50==0){
@@ -2012,7 +2014,7 @@ AD_test(struct params *param, int trig)
 
 
 void
-getCurrentStatus(void)
+getCurrentStatus(void) //Seems to update the values for position, velocity and angular velocities
 {
     int    i;
     long   *countbuff;
