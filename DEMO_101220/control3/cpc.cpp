@@ -232,50 +232,50 @@ main()
     printf("CPC > Bye!\n");
 }
 
-/* 更新履歴つうかなんっつうか。
+/* What is the update history?
 
-0.5(02-10-28):cpサーバの多重起動を防止する機構を取り付けた。
-　　　　　　　そのせいで、下の注意事項に変更あり。
-　　　　　　　exitコマンドで、exitコマンドを送信するように変更。
-　　　　　　　finでも、自動的にexitコマンドを追加的に送信。
-　　　　　　　なんでこんなことをしなきゃいけないかというと、
-　　　　　　　cp.cの方で、io_closeで終了という裏技を使わなくしたため。
-　　　　　　　まあ、しょうがないわな。
-　　　　　　　強制終了コマンドは0.6で再追加される見通し。
-　　　　　　　面倒なので、多分、追加されない。
-　　　　　　　フラグを立ててstrcmp１個で済ますか、strcmpを２個加えるか。
+0.5 (02-10-28): A mechanism to prevent multiple activation of cp server was added.
+Because of that, the notes below have been changed.
+Changed to send the exit command with the exit command.
+Even in fin, the exit command is automatically sent additionally.
+The reason why we have to do this is:
+た め Because cp.c no longer uses the trick of ending with io_close.
+Well, I ca n’t help it.
+The forced termination command is expected to be re-added with 0.6.
+Since it is cumbersome, maybe not added.
+Whether to set a flag and use one strcmp or add two strcmp.
 */
 
-/* コマンドに関する注意事項
+/* Notes on commands
 
-・64bit intとしてlong long型なんていうものを使用しています。
-　（long long型はC++での64bit int型の一般的な型名、らしいです）
-　qccで64bit intを宣言するスマートなやり方がわからなかったからです。
-　環境により64bit intの型は変わると思うので、
-　できるだけ早く、スマートでエレガントなやり方を探してください。
-　gccを使うのであればInt64が使えたはずです。
-・exitと入力するとプログラムを終了することなくcpcを強制終了します。
-　プログラム本体にデータは送信されません。
-　cpcが終了したことをプログラム本体が知るためには、
-　cpデバイスを登録するときのio_close関数を自作してください。
-・exitで始まるコマンドを入力すると"exit"と認識されます。
-・exitで終了しても、再びcpcを立ち上げれば動くはずです。
-・finで始まるコマンドを入力すると"fin"として認識され、
-　プログラム本体を終了し、cpcを終了します。
-　データは送信されます。
-・変数として８文字以上の文字列を入力した場合、
-　最初の８文字が入力変数として送られるハズです。
-・５１１文字以降の入力データは破棄されます。
-　バッファオーバーフロー対策です。
+・ Long long type is used as 64bit int.
+(Long long type seems to be a common type name of 64bit int type in C ++)
+か ら I didn't know the smart way to declare 64bit int in qcc.
+Since the type of 64-bit int will change depending on the environment,
+Please look for a smart and elegant way as soon as possible.
+If you use gcc, you should have been able to use Int64.
+・ Enter exit to forcibly terminate cpc without exiting the program.
+* Data is not sent to the program.
+In order for the program body to know that cpc has ended,
+* Create your own io_close function for registering cp devices.
+-If you enter a command starting with exit, it will be recognized as "exit".
+-Even if you exit with exit, it should work if you start cpc again.
+-If you enter a command starting with fin, it will be recognized as "fin"
+Quit the program body and ccp.
+Data will be sent.
+・ If you enter a string of 8 or more characters as a variable,
+The first 8 characters are sent as input variables.
+・ Input data after 511 characters will be discarded.
+Measures against buffer overflow.
 
 */
 
-/* 入力したデータを変数に取り込むところ、unionを使えば、8byteずつ別の変数に
-memcpyするなんて美しくないことをしなくても済むのに、
-とarcnetのドライバを書いたときにも思いましたが、
-面倒なので、後生の人たち、頑張ってください。
-unionで宣言するときに8byte変数を使わないと、取り出しが変になります。intだけですが。
-書き出しの時に8byte変数にcastしても良いかも。コンパイラに怒られる可能性大。
-あと、unionな変数を宣言した後に、ちゃんとmallocしてmemsetで0にしないとヤバイ。
-それからバッファオーバーフローとかにも気を付けてください。
-一応、それらしいことはやったつもりです。*/
+/* When input data is stored in a variable, if union is used, 8 bytes are stored in another variable
+You do n’t have to do anything beautiful to memcpy,
+I thought when I wrote the arcnet driver,
+Since it is troublesome, please do your best for the later generations.
+If you do not use 8byte variables when declaring in union, the retrieval will be strange. Only int.
+May be cast to 8byte variable when exporting. The possibility of getting angry with the compiler.
+Also, after declaring a union variable, you must malloc it properly and set it to 0 with memset.
+Also watch out for buffer overflows.
+I intend to do something like that. */
