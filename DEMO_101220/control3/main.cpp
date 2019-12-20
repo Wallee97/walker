@@ -307,7 +307,7 @@ ctrlTask(struct params *motor)
                 return (ERROR);
             }
     
-            ctrlEndFlag = 0;
+            ctrlEndFlag = 0;  //This and the initial definition are the only two times where this ctrlEndFlag is set to 0
 
             control(motor);
             ticks++;
@@ -1626,7 +1626,7 @@ TraCtrl6(struct params *param, int trig)
 
   /*  printf("des_Cur_e.omega %f\n",des_Cur_e.omega);*/
   Pre();
-  Inv();
+  Inv();  //Question: What is the Inv() function? It is used in several occasions but not defined in main
   
   torqCtrl();
   
@@ -2090,7 +2090,10 @@ getCurrentPosition(void)
                  *TICKS)/2+pre_Cur_e.pos[Y];
 	
 }
-	
+
+/*This seems to be the main function to calculate the breaking force for the wheels. It uses current and destined
+angular Velocities from somewhere and generates in a PI approach a Voltage, that is sent to the brakes.
+//*/	
 void
 torqCtrl(void)
 {
@@ -2123,7 +2126,7 @@ torqCtrl(void)
     accel[1] = des_Cur_j.acc[1]+Kp[1]*(des_Cur_j.vel[1]-Cur_j.vel[1])+Ki_control[1]*I[1];
 
     /* Torque */
-    torq[0] =-( Inertia[0]*accel[0] + Damper[0]*Cur_j.vel[0] );
+    torq[0] =-( Inertia[0]*accel[0] + Damper[0]*Cur_j.vel[0] ); //Question: Where does that Inertia come from?
     torq[1] =-( Inertia[1]*accel[1] + Damper[1]*Cur_j.vel[1] );   
 
     /* Command voltage */
