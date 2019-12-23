@@ -140,6 +140,7 @@ unsigned short rmsg[1]={1};
 
 double mindata[2] = {0.};
 double mindata_d[7]={0.};   //Question: Where does this one come from, what data is it?
+                            //I believe it's from Line 795, in recv function, inside get_sick_data function
 
 int sockfd, new_fd;
 struct sockaddr_in my_addr;
@@ -207,7 +208,9 @@ void create_sick(void)
 void 
 init(void)
 {
-    ThreadCtl(_NTO_TCTL_IO,0);
+    ThreadCtl(_NTO_TCTL_IO,0); //Important: Makes us control a thread on QNX system
+                              //Lets the thread execute I/O opcodes
+                              //I think we have to understand how this translates to RasPI
 
     create_sick();
 	
@@ -307,7 +310,7 @@ ctrlTask(struct params *motor)
                 return (ERROR);
             }
     
-            ctrlEndFlag = 0;
+            ctrlEndFlag = 0;  //This and the initial definition are the only two times where this ctrlEndFlag is set to 0
 
             control(motor);
             ticks++;
@@ -543,7 +546,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 		printf("D = %f, D_th = %f\n", des_Cur_e.dmp[V], des_Cur_e.dmp[TH]);
 	}
 	
-	getCurrentStatus();
+	getCurrentStatus(); //Seems to update the values for position, velocity and angular velocities
 
 	
 	if(ticks%50==0){
@@ -556,7 +559,7 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  
 	  foothip_dis = fh_dis / 1000.;
 	  
-	  //these conditions seem to be checking for the state of the user, wether the user sits, stands or midolu(?).
+	  //these conditions seem to be checking for the state of the user, wether the user sits, stands, walks, midolu(?) or is tumbling.
     //the two laser sensors on the walker which are not the lidar might be giving the distance data that is used here.
 	  //Production rule start
 	  if((Cur_e.velocity < 0.03) && (Cur_e.velocity > -0.03) && (fh_dis > 70.) && (fh_dis < 200.) && (mindata_d[yHip] > mindata_d[YG])){
@@ -661,9 +664,9 @@ LMSAvoidCtrl(struct params *param, int trig)
 	  }
 	}
 	
-	getObstacleAbsoluteCoordinate();
+	getObstacleAbsoluteCoordinate(); //Uses mindata to find obstacles in the vicinity (in absolute cartesian coords)
 	
-		TorqCtrl();
+		TorqCtrl(); //and then applies appropriate braking force depending on obstacle distance I guess?
 		trig = 0;
 		ticks++;
 		return;
@@ -782,7 +785,7 @@ OBSCtrl(struct params *param, int trig)
 void get_sick_data(void)
 {
 	static unsigned long ticks=0;
-	double CurData[4] = {0.};
+	double CurData[4] = {0.}; //CurData seems to hold data on the force/torque on wheels, position and velocity of Walker
 	
 	CurData[X] = f_b;
 	CurData[Y] = t_b;
@@ -790,7 +793,7 @@ void get_sick_data(void)
 	CurData[V] = Cur_e.velocity;
 	
 
-	recv(new_fd, mindata_d, sizeof(mindata_d),0);
+	recv(new_fd, mindata_d, sizeof(mindata_d),0); //Important: This seems to be where the SICK data is stored into mindata_d
 	send(new_fd, CurData, sizeof(CurData),0);
 
 /* 	if(ticks%100==0) */
@@ -1626,7 +1629,7 @@ TraCtrl6(struct params *param, int trig)
 
   /*  printf("des_Cur_e.omega %f\n",des_Cur_e.omega);*/
   Pre();
-  Inv();
+  Inv();  //Question: What is the Inv() function? It is used in several occasions but not defined in main
   
   torqCtrl();
   
@@ -2012,7 +2015,7 @@ AD_test(struct params *param, int trig)
 
 
 void
-getCurrentStatus(void)
+getCurrentStatus(void) //Seems to update the values for position, velocity and angular velocities
 {
     int    i;
     long   *countbuff;
@@ -2090,7 +2093,10 @@ getCurrentPosition(void)
                  *TICKS)/2+pre_Cur_e.pos[Y];
 	
 }
-	
+
+/*This seems to be the main function to calculate the breaking force for the wheels. It uses current and destined
+angular Velocities from somewhere and generates in a PI approach a Voltage, that is sent to the brakes.
+//*/	
 void
 torqCtrl(void)
 {
@@ -2123,7 +2129,7 @@ torqCtrl(void)
     accel[1] = des_Cur_j.acc[1]+Kp[1]*(des_Cur_j.vel[1]-Cur_j.vel[1])+Ki_control[1]*I[1];
 
     /* Torque */
-    torq[0] =-( Inertia[0]*accel[0] + Damper[0]*Cur_j.vel[0] );
+    torq[0] =-( Inertia[0]*accel[0] + Damper[0]*Cur_j.vel[0] ); //Question: Where does that Inertia come from?
     torq[1] =-( Inertia[1]*accel[1] + Damper[1]*Cur_j.vel[1] );   
 
     /* Command voltage */
