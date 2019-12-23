@@ -37,8 +37,8 @@
 //#include <sys/siginfo.h>
 //#include <sys/neutrino.h>
 #include <sys/types.h>
-//#include <sys/socket.h>
-//#include <netinet/in.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 //#include <sys/wait.h>
 
 #include "params.h"
@@ -2689,13 +2689,3 @@ main(void)
 }
 
 //*test to push*/
-
-
-
-
-
-
-
-
-
-
